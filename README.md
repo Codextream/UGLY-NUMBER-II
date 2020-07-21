@@ -1,21 +1,21 @@
-# 3 SUM
+# UGLY NUMBER II
 
-Given an array nums of n integers, are there elements a, b, c in nums such that a + b + c = 0? Find all unique triplets in the array which gives the sum of zero.
+Write a program to find the n-th ugly number.
 
-### Note:
-
-The solution set must not contain duplicate triplets.
+Ugly numbers are positive numbers whose prime factors only include 2, 3, 5. 
 
 ### Example:
 <pre>
-Given array nums = [-1, 0, 1, 2, -1, -4],
-
-A solution set is:
-[
-  [-1, 0, 1],
-  [-1, -1, 2]
-]
+Input: n = 10
+Output: 12
+Explanation: 1, 2, 3, 4, 5, 6, 8, 9, 10, 12 is the sequence of the first 10 ugly numbers.
 </pre>
+
+### Note:  
+
+1 is typically treated as an ugly number.
+n does not exceed 1690.
+
 
 ### Solution:
 
@@ -24,26 +24,39 @@ A solution set is:
 
 class Solution {
 public:
-    vector<vector<int>> threeSum(vector<int>& nums) {
-        sort(nums.begin(),nums.end());
-        int n = nums.size();
-        vector<vector<int>> ans;
-        for(int i=0;i<n-2;i++){
-               if(i>0 && (nums[i]==nums[i-1]) )continue;
-               int l=i+1, r= n-1;
-               while(l<r){
-                   int sum =nums[i]+nums[l]+nums[r];
-                   if(sum<0) l++;
-                   else if(sum>0)r--;
-                   else {
-                       ans.push_back(vector<int>{nums[i],nums[l],nums[r]});
-                       while(l+1<r && nums[l]==nums[l+1])l++;
-                       while(l<r-1 && nums[r]==nums[r-1]) r--;
-                       l++; r--;
-                   }
-               }
+    unsigned getNthUglyNo(unsigned n) 
+    { 
+        unsigned ugly[n]; 
+        unsigned i2 = 0, i3 = 0, i5 = 0; 
+        unsigned next_multiple_of_2 = 2; 
+        unsigned next_multiple_of_3 = 3; 
+        unsigned next_multiple_of_5 = 5; 
+        unsigned next_ugly_no = 1; 
+        ugly[0] = 1; 
+        for (int i=1; i<n; i++) 
+        { 
+           next_ugly_no = min(next_multiple_of_2,min(next_multiple_of_3,next_multiple_of_5)); 
+           ugly[i] = next_ugly_no; 
+           if (next_ugly_no == next_multiple_of_2) 
+           { 
+               i2 = i2+1; 
+               next_multiple_of_2 = ugly[i2]*2; 
+           } 
+           if (next_ugly_no == next_multiple_of_3) 
+           { 
+               i3 = i3+1; 
+               next_multiple_of_3 = ugly[i3]*3; 
+           } 
+           if (next_ugly_no == next_multiple_of_5) 
+           { 
+               i5 = i5+1; 
+               next_multiple_of_5 = ugly[i5]*5; 
+           } 
         }
-        return ans;
+        return next_ugly_no; 
+    } 
+    int nthUglyNumber(int n) {
+        return getNthUglyNo(n);
     }
 };
 
